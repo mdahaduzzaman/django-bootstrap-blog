@@ -1,0 +1,30 @@
+{% extends "blog/base.html" %}
+{% load static %}
+{% block content %}
+<div class="col-sm-10">
+    <h1>Signup</h1>
+    <div class="card my-3 bg-dark ">
+        <div class="card-body text-white ">
+            <form class="row" novalidate method="post">
+                {% csrf_token %}
+                {% if form %}
+                    {% for field in form %}
+                        <div class="w-100 mb-2">
+                            {{ field.label_tag }} <br>
+                            {{ field }}
+                            {% if field.errors %}
+                                {% for error in field.errors %}
+                                    <small class="text-danger">{{ error }}</small>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+                <div class="mt-1">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock content %}
