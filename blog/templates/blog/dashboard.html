@@ -1,16 +1,22 @@
 {% extends "blog/base.html" %}
 {% load static %}
-
+{% block css %}
+<style>
+    .django-ckeditor-widget{
+        display: block !important;
+    }
+</style>
+{% endblock css %}
 {% block side %}{% endblock side %}
 {% block content %}
-<div class="col-sm-4">
+<div class="col-12">
     <h2 class="alert alert-success mt-3 text-center ">Publish a new post</h2>
-    <form novalidate method="post">
+    <form novalidate method="post" enctype="multipart/form-data">
         {% csrf_token %}
         {% if form %}
             {% for field in form %}
                 <div class="mb-2">
-                    {{ field.label_tag }} <br>
+                    {{ field.label_tag }} <br class="mb-2">
                     {{ field }}
                     {% if field.errors %}
                         {% for error in field.errors %}
@@ -19,13 +25,15 @@
                     {% endif %}
                 </div>
             {% endfor %}
+            {% comment %} {{ form.as_p }}
+            {{ form.media }} {% endcomment %}
         {% endif %}
         <div class="mt-1">
-            <button type="submit" class="btn btn-primary">Submit</button>
+            <button type="submit" class="btn btn-primary">Post</button>
         </div>
     </form>
 </div>
-<div class="col-sm-8">
+<div class="col-12">
     <h1 class="my-3">Dashboard</h1>
     <div class="card my-3 bg-dark text-white">
         {% if posts %}
@@ -40,10 +48,10 @@
             </thead>
             <tbody>
                 {% for post in posts %}
-                <tr>
+                <tr class="border border-2 ">
                     <td>{{ post.id }}</td>
                     <td>{{ post.title }}</td>
-                    <td>{{ post.content|linebreaksbr  }}</td>
+                    <td>{{ post.content|safe  }}</td>
                     <td>
                         <a href="{% url 'editPost' post.id %}" class="badge bg-warning">Edit</a>
                         <a href="" class="badge bg-danger">Delete</a>
@@ -58,3 +66,7 @@
     </div>
 </div>
 {% endblock content %}
+{% block javaScript %}
+<script type="text/javascript" src="{% static "ckeditor/ckeditor-init.js" %}"></script>
+<script type="text/javascript" src="{% static "ckeditor/ckeditor/ckeditor.js" %}"></script>
+{% endblock javaScript %}

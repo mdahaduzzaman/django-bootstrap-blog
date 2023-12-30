@@ -1,11 +1,17 @@
-{% extends "blog/base.html" %} {% load static %} {% block content %}
-<div class="col-sm-10">
+{% extends "blog/base.html" %} 
+{% load static %} 
+{% block content %}
+<div class="col-12">
   <h1 id="homeHeading" class="my-3">This is Homepage</h1>
   {% for post in posts %}
   <div class="card my-3 bg-body-secondary">
     <div class="card-body">
-      <h1 class="card-title fw-bold">{{ post.title }}</h1>
-      <p class="card-text">{{ post.content|linebreaksbr }}</p>
+      <h1 class="card-title fw-semibold" style="font-style: italic;">{{ post.title }}</h1>
+      {% if post.image %}
+        <img src="{{ post.image.url }}" alt="{{ post.title }} image" class="my-2" style="width: 100%; max-height: 300px; object-fit: contain;">
+      {% endif %}
+
+      <p class="card-text">{{ post.content|safe }}</p>
       <div class="d-flex justify-content-between" style="font-size: 10px">
         <div class="d-flex align-items-center gap-1">
           <span>
@@ -65,7 +71,10 @@
   </div>
   {% endfor %}
 </div>
-{% endblock content %} {% block javaScript %}
+{% endblock content %} 
+
+{% block javaScript %}
+
 <script>
   const handleLikeDislike = (postId, liked) => {
     const postData = {
@@ -127,4 +136,32 @@
 
   };
 </script>
+
+
+
+{% comment %} 
+<script>
+  /*
+      Keep track of the scroll
+    */
+  document.addEventListener('DOMContentLoaded', function() {
+      const addToCartButtons = document.querySelectorAll('.add-to-cart-btn');
+
+      addToCartButtons.forEach(function(button) {
+          button.addEventListener('click', function(event) {
+              // Get the current scroll position and store it in sessionStorage
+              sessionStorage.setItem('scrollPosition', window.scrollY);
+          });
+      });
+  });
+
+  // After the page is loaded, check for stored scroll position and scroll to it
+  window.onload = function() {
+      const storedScrollPosition = sessionStorage.getItem('scrollPosition');
+      if (storedScrollPosition) {
+          window.scrollTo(0, parseInt(storedScrollPosition));
+          sessionStorage.removeItem('scrollPosition'); // Remove the stored scroll position
+      }
+  }
+</script> {% endcomment %}
 {% endblock javaScript %}

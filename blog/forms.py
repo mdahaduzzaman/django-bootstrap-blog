@@ -29,8 +29,9 @@ class LoginForm(forms.Form):
 class PostForm(forms.ModelForm):
     class Meta:
         model = Post
-        fields = ['title', 'content']
+        fields = ['title', 'image', 'content']
         widgets= {
             'title': forms.TextInput(attrs={'placeholder': 'Enter your blog title'}),
-            'content': forms.Textarea(attrs={'rows': 5, 'placeholder': 'Enter your blog content....'})
+            'content': forms.Textarea(attrs={'rows': 3, 'placeholder': 'Enter your blog content....'})
         }
+    image = forms.ImageField(label="Image (optional)", required=False)

@@ -11,9 +11,11 @@ import json
 # Home page
 def home(request):
     posts = Post.objects.all()
-    for post in posts:
-        print(post.likedBy.all())
     return render(request, 'blog/home.html', {'posts': posts})
+
+
+def some(request):
+    return redirect(request.META.get('HTTP_REFERER'))
 
 def getLike(request):
     if request.method == "POST":
@@ -59,7 +61,7 @@ def contact(request):
 # Dashboard page
 def dashboard(request):
     if request.method == "POST":
-        form = PostForm(request.POST)
+        form = PostForm(request.POST, request.FILES)
         if form.is_valid():
             form.instance.author = request.user
             form.save()
@@ -83,7 +85,7 @@ def editPost(request, postID):
             return redirect('dashboard')
         
     if request.method == "POST":
-        form = PostForm(request.POST, instance=post)
+        form = PostForm(request.POST, request.FILES, instance=post)
         if form.is_valid():
             form.save()
             messages.success(request, 'post updated successfully.')
